@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "ignite-teams",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
@@ -21,6 +22,5 @@
     "@types/react": "~18.0.14",
     "@types/react-native": "~0.69.1",
     "typescript": "~4.3.5"
-  },
-  "private": true
+  }
 }
