@@ -1,14 +1,23 @@
+import { Image } from "react-native";
 import styled from "styled-components/native";
 
-export const Container = styled.View`
+interface ContainerProps {
+  showBackButton: boolean;
+}
+
+export const Container = styled.View<ContainerProps>`
   width: 100%;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: ${({ showBackButton }) => {
+    return showBackButton ? "space-between" : "center";
+  }};
   padding-top: 25px;
 `;
 
-export const Logo = styled.Image`
+export const BackButton = styled.TouchableOpacity``;
+
+export const Logo = styled(Image)`
   width: 46px;
   height: 55px;
 `;
