@@ -5,13 +5,14 @@ import { Header } from "~/components/Header";
 import { Highlight } from "~/components/Highlight";
 import { IconButton } from "~/components/IconButton";
 import { Input } from "~/components/Input";
+import { PlayerCard } from "~/components/PlayerCard";
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 
 const teams = ["Time A", "Time B"];
 
 export const Players: React.FC = () => {
   const [team, setTeam] = useState("Time A");
-  const [players, setPlayers] = useState<string[]>([]);
+  const [players, setPlayers] = useState<string[]>(["Wallace"]);
 
   return (
     <Container>
@@ -43,6 +44,14 @@ export const Players: React.FC = () => {
 
         <NumberOfPlayers>{players.length}</NumberOfPlayers>
       </HeaderList>
+
+      <FlatList
+        data={players}
+        keyExtractor={player => player}
+        renderItem={({ item }) => (
+          <PlayerCard name={item} onDelete={() => {}} />
+        )}
+      />
     </Container>
   );
 };
