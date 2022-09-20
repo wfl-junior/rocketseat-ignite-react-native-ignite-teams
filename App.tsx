@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import { StatusBar } from "react-native";
+import { ThemeProvider } from "styled-components/native";
 import { Groups } from "~/screens/Groups";
+import { defaultTheme } from "~/themes";
 
 const App: React.FC = () => (
   <Fragment>
@@ -10,7 +12,9 @@ const App: React.FC = () => (
       translucent
     />
 
-    <Groups />
+    <ThemeProvider theme={defaultTheme}>
+      <Groups />
+    </ThemeProvider>
   </Fragment>
 );
 
