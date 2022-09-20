@@ -18,6 +18,7 @@ export const Groups: React.FC = () => {
       <FlatList
         data={groups}
         keyExtractor={group => group}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item: group }) => <GroupCard title={group} />}
         contentContainerStyle={!groups.length ? { flex: 1 } : undefined}
         ListEmptyComponent={() => (
