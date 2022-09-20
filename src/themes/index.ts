@@ -24,9 +24,9 @@ export const defaultTheme = {
     bold: "Roboto_700Bold",
   },
   fontSize: {
-    sm: 14,
-    md: 16,
-    lg: 18,
-    xl: 24,
+    sm: "14px",
+    md: "16px",
+    lg: "18px",
+    xl: "24px",
   },
 } as const;
