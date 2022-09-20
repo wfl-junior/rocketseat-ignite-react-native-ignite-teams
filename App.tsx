@@ -4,8 +4,9 @@ import {
   useFonts,
 } from "@expo-google-fonts/roboto";
 import { Fragment } from "react";
-import { ActivityIndicator, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import { ThemeProvider } from "styled-components/native";
+import { Loading } from "~/components/Loading";
 import { Groups } from "~/screens/Groups";
 import { defaultTheme } from "~/themes";
 
@@ -24,7 +25,7 @@ const App: React.FC = () => {
       />
 
       <ThemeProvider theme={defaultTheme}>
-        {isFontReady ? <Groups /> : <ActivityIndicator />}
+        {isFontReady ? <Groups /> : <Loading />}
       </ThemeProvider>
     </Fragment>
   );
