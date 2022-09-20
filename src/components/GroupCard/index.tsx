@@ -11,7 +11,7 @@ export const GroupCard: React.FC<GroupCardProps> = ({ title, ...props }) => {
 
   return (
     <Container {...props}>
-      <Icon size={32} color={colors.green[700]} weight="fill" />
+      <Icon size={32} color={colors.green[500]} weight="fill" />
       <Title>{title}</Title>
     </Container>
   );
