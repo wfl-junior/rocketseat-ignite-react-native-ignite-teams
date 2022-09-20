@@ -1,7 +1,3 @@
-import { Container, Title } from "./styles";
+import { Container } from "./styles";
 
-export const Groups: React.FC = () => (
-  <Container>
-    <Title>Groups</Title>
-  </Container>
-);
+export const Groups: React.FC = () => <Container></Container>;
