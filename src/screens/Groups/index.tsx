@@ -3,6 +3,7 @@ import { FlatList } from "react-native";
 import { GroupCard } from "~/components/GroupCard";
 import { Header } from "~/components/Header";
 import { Highlight } from "~/components/Highlight";
+import { ListEmpty } from "~/components/ListEmpty";
 import { Container } from "./styles";
 
 export const Groups: React.FC = () => {
@@ -17,6 +18,10 @@ export const Groups: React.FC = () => {
         data={groups}
         keyExtractor={group => group}
         renderItem={({ item: group }) => <GroupCard title={group} />}
+        contentContainerStyle={!groups.length ? { flex: 1 } : undefined}
+        ListEmptyComponent={() => (
+          <ListEmpty message="Que tal cadastrar a primeira turma?" />
+        )}
       />
     </Container>
   );
