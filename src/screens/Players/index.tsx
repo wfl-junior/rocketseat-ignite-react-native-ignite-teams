@@ -1,3 +1,4 @@
+import { Filter } from "~/components/Filter";
 import { Header } from "~/components/Header";
 import { Highlight } from "~/components/Highlight";
 import { IconButton } from "~/components/IconButton";
@@ -17,5 +18,7 @@ export const Players: React.FC = () => (
       <Input placeholder="Nome do participante" autoCorrect={false} />
       <IconButton icon="add" />
     </Form>
+
+    <Filter title="Time A" isActive />
   </Container>
 );
