@@ -2,6 +2,7 @@ import { useTheme } from "styled-components/native";
 import { Button } from "~/components/Button";
 import { Header } from "~/components/Header";
 import { Highlight } from "~/components/Highlight";
+import { Input } from "~/components/Input";
 import { Container, Content, Icon } from "./styles";
 
 export const NewGroup: React.FC = () => {
@@ -19,7 +20,9 @@ export const NewGroup: React.FC = () => {
           subtitle="Crie uma turma para adicionar as pessoas"
         />
 
-        <Button title="Criar" />
+        <Input />
+
+        <Button title="Criar" style={{ marginTop: 20 }} />
       </Content>
     </Container>
   );
