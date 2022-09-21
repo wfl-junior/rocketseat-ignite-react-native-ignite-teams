@@ -10,6 +10,10 @@ import { ListEmpty } from "~/components/ListEmpty";
 import { PlayerCard } from "~/components/PlayerCard";
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 
+export interface PlayersRouteParams {
+  group: string;
+}
+
 const teams = ["Time A", "Time B"];
 
 export const Players: React.FC = () => {
