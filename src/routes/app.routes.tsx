@@ -6,12 +6,7 @@ import { Players } from "~/screens/Players";
 const { Navigator, Screen } = createNativeStackNavigator();
 
 export const AppRoutes: React.FC = () => (
-  <Navigator
-    screenOptions={{
-      headerShown: false,
-      animation: "fade_from_bottom",
-    }}
-  >
+  <Navigator screenOptions={{ headerShown: false }}>
     <Screen name="groups" component={Groups} />
     <Screen name="new-group" component={NewGroup} />
     <Screen name="players" component={Players} />
