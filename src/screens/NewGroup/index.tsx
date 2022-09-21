@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
 import { Button } from "~/components/Button";
 import { Header } from "~/components/Header";
@@ -7,6 +8,11 @@ import { Container, Content, Icon } from "./styles";
 
 export const NewGroup: React.FC = () => {
   const { colors } = useTheme();
+  const { navigate } = useNavigation();
+
+  function handleAddNewGroup() {
+    navigate("players", { group: "Rocketseat" });
+  }
 
   return (
     <Container>
@@ -21,7 +27,12 @@ export const NewGroup: React.FC = () => {
         />
 
         <Input placeholder="Nome da turma" />
-        <Button title="Criar" style={{ marginTop: 20 }} />
+
+        <Button
+          title="Criar"
+          style={{ marginTop: 20 }}
+          onPress={handleAddNewGroup}
+        />
       </Content>
     </Container>
   );

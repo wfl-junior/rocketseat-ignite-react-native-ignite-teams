@@ -1,4 +1,4 @@
-import { Image } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
 interface ContainerProps {
@@ -15,7 +15,7 @@ export const Container = styled.View<ContainerProps>`
   padding-top: 25px;
 `;
 
-export const BackButton = styled.TouchableOpacity``;
+export const BackButton = styled(TouchableOpacity)``;
 
 export const Logo = styled(Image)`
   width: 46px;
