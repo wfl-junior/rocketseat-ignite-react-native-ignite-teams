@@ -6,7 +6,7 @@ import { Players } from "~/screens/Players";
 const { Navigator, Screen } = createNativeStackNavigator();
 
 export const AppRoutes: React.FC = () => (
-  <Navigator>
+  <Navigator screenOptions={{ headerShown: false }}>
     <Screen name="groups" component={Groups} />
     <Screen name="new-group" component={NewGroup} />
     <Screen name="players" component={Players} />

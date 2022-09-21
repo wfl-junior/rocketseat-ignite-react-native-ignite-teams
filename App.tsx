@@ -7,7 +7,7 @@ import { Fragment } from "react";
 import { StatusBar } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import { Loading } from "~/components/Loading";
-import { Players } from "~/screens/Players";
+import { Routes } from "~/routes";
 import { defaultTheme } from "~/themes";
 
 const App: React.FC = () => {
@@ -25,7 +25,7 @@ const App: React.FC = () => {
       />
 
       <ThemeProvider theme={defaultTheme}>
-        {isFontReady ? <Players /> : <Loading />}
+        {isFontReady ? <Routes /> : <Loading />}
       </ThemeProvider>
     </Fragment>
   );
