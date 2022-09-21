@@ -12,7 +12,6 @@ export const Container = styled.View<ContainerProps>`
   justify-content: ${({ showBackButton }) => {
     return showBackButton ? "space-between" : "center";
   }};
-  padding-top: 25px;
 `;
 
 export const BackButton = styled(TouchableOpacity)``;
