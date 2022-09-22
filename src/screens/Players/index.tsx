@@ -22,11 +22,22 @@ export interface PlayersRouteParams {
 const teams = ["Time A", "Time B"];
 
 export const Players: React.FC = () => {
-  const [team, setTeam] = useState("Time A");
+  const [team, setTeam] = useState(teams[0]);
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [newPlayerName, setNewPlayerName] = useState("");
   const { params } = useRoute();
   const { group } = params as PlayersRouteParams;
+
+  const fetchPlayersByTeam = useCallback(() => {
+    getAllPlayersByGroupAndTeam(group, team)
+      .then(setPlayers)
+      .catch(error => {
+        console.log(error);
+        Alert.alert("Erro", "Não foi possível buscar os participantes.");
+      });
+  }, [group, team]);
+
+  useFocusEffect(fetchPlayersByTeam);
 
   async function handleAddPlayer() {
     try {
@@ -38,8 +49,7 @@ export const Players: React.FC = () => {
 
       await createPlayerByGroup({ name: newPlayerNameTrimmed, team }, group);
 
-      const players = await getAllPlayersByGroupAndTeam(group, team);
-      setPlayers(players);
+      fetchPlayersByTeam();
     } catch (error) {
       if (error instanceof AppError) {
         return Alert.alert("Erro", error.message);
@@ -49,17 +59,6 @@ export const Players: React.FC = () => {
       Alert.alert("Erro", "Não foi possível adicionar o participante.");
     }
   }
-
-  useFocusEffect(
-    useCallback(() => {
-      getAllPlayersByGroupAndTeam(group, team)
-        .then(setPlayers)
-        .catch(error => {
-          console.log(error);
-          Alert.alert("Erro", "Não foi possível buscar os participantes.");
-        });
-    }, [group, team]),
-  );
 
   return (
     <Container>
@@ -99,7 +98,7 @@ export const Players: React.FC = () => {
 
       <FlatList
         data={players}
-        keyExtractor={player => player.name}
+        keyExtractor={player => `${player.name}-${player.team}`}
         showsVerticalScrollIndicator={false}
         renderItem={({ item: player }) => (
           <PlayerCard name={player.name} onDelete={() => {}} />

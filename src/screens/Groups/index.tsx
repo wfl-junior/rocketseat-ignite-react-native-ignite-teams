@@ -13,16 +13,16 @@ export const Groups: React.FC = () => {
   const [groups, setGroups] = useState<string[]>([]);
   const { navigate } = useNavigation();
 
-  useFocusEffect(
-    useCallback(() => {
-      getAllGroups()
-        .then(setGroups)
-        .catch(error => {
-          console.log(error);
-          Alert.alert("Erro", "Não foi possível buscar os grupos.");
-        });
-    }, []),
-  );
+  const fetchGroups = useCallback(() => {
+    getAllGroups()
+      .then(setGroups)
+      .catch(error => {
+        console.log(error);
+        Alert.alert("Erro", "Não foi possível buscar os grupos.");
+      });
+  }, []);
+
+  useFocusEffect(fetchGroups);
 
   function handleOpenGroup(group: string) {
     navigate("players", { group });
