@@ -14,8 +14,12 @@ export const NewGroup: React.FC = () => {
   const [group, setGroup] = useState("");
 
   async function handleAddNewGroup() {
-    await createGroup(group);
-    navigate("players", { group });
+    try {
+      await createGroup(group);
+      navigate("players", { group });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
