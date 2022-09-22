@@ -1,9 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GROUPS_STORAGE_KEY } from "../config";
+import { getAllGroups } from "./getAllGroups";
 
 export async function createGroup(newGroup: string) {
-  const existingGroups = await AsyncStorage.getItem(GROUPS_STORAGE_KEY);
-  const groups = existingGroups ? JSON.parse(existingGroups) : [];
+  const groups = await getAllGroups();
 
   await AsyncStorage.setItem(
     GROUPS_STORAGE_KEY,
