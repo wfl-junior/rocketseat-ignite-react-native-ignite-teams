@@ -1,11 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import { Alert } from "react-native";
 import { useTheme } from "styled-components/native";
 import { Button } from "~/components/Button";
 import { Header } from "~/components/Header";
 import { Highlight } from "~/components/Highlight";
 import { Input } from "~/components/Input";
 import { createGroup } from "~/storage/groups/createGroup";
+import { AppError } from "~/utils/AppError";
 import { Container, Content, Icon } from "./styles";
 
 export const NewGroup: React.FC = () => {
@@ -15,10 +17,21 @@ export const NewGroup: React.FC = () => {
 
   async function handleAddNewGroup() {
     try {
-      await createGroup(group);
-      navigate("players", { group });
+      const newGroup = group.trim();
+
+      if (!newGroup.length) {
+        throw new AppError("Informe o nome da turma.");
+      }
+
+      await createGroup(newGroup);
+      navigate("players", { group: newGroup });
     } catch (error) {
+      if (error instanceof AppError) {
+        return Alert.alert("Erro", error.message);
+      }
+
       console.log(error);
+      Alert.alert("Erro", "Não foi possível criar uma nova turma.");
     }
   }
 
