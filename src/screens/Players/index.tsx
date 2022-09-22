@@ -1,4 +1,8 @@
-import { useFocusEffect, useRoute } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { useCallback, useRef, useState } from "react";
 import { Alert, FlatList, TextInput } from "react-native";
 import { Button } from "~/components/Button";
@@ -9,6 +13,7 @@ import { IconButton } from "~/components/IconButton";
 import { Input } from "~/components/Input";
 import { ListEmpty } from "~/components/ListEmpty";
 import { PlayerCard } from "~/components/PlayerCard";
+import { deleteGroup } from "~/storage/groups/deleteGroup";
 import { createPlayerByGroup } from "~/storage/players/createPlayerByGroup";
 import { deletePlayerByGroup } from "~/storage/players/deletePlayerByGroup";
 import { getAllPlayersByGroupAndTeam } from "~/storage/players/getAllPlayersByGroupAndTeam";
@@ -27,6 +32,7 @@ export const Players: React.FC = () => {
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [newPlayerName, setNewPlayerName] = useState("");
   const newPlayerNameInputRef = useRef<TextInput>(null);
+  const { navigate } = useNavigation();
   const { params } = useRoute();
   const { group } = params as PlayersRouteParams;
 
@@ -72,6 +78,28 @@ export const Players: React.FC = () => {
       console.log(error);
       Alert.alert("Erro", "Não foi possível remover o participante.");
     }
+  }
+
+  function handleDeleteGroup() {
+    Alert.alert("Atenção", "Deseja mesmo remover o grupo?", [
+      {
+        text: "Não",
+        style: "cancel",
+      },
+      {
+        text: "Sim",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await deleteGroup(group);
+            navigate("groups");
+          } catch (error) {
+            console.log(error);
+            Alert.alert("Erro", "Não foi possível remover a turma.");
+          }
+        },
+      },
+    ]);
   }
 
   return (
@@ -131,6 +159,7 @@ export const Players: React.FC = () => {
         title="Remover turma"
         type="secondary"
         style={{ marginTop: 16 }}
+        onPress={handleDeleteGroup}
       />
     </Container>
   );
