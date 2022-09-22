@@ -10,6 +10,7 @@ import { Input } from "~/components/Input";
 import { ListEmpty } from "~/components/ListEmpty";
 import { PlayerCard } from "~/components/PlayerCard";
 import { createPlayerByGroup } from "~/storage/players/createPlayerByGroup";
+import { deletePlayerByGroup } from "~/storage/players/deletePlayerByGroup";
 import { getAllPlayersByGroupAndTeam } from "~/storage/players/getAllPlayersByGroupAndTeam";
 import { PlayerStorageDTO } from "~/storage/players/PlayerStorageDTO";
 import { AppError } from "~/utils/AppError";
@@ -63,6 +64,16 @@ export const Players: React.FC = () => {
     }
   }
 
+  async function handleDeletePlayer(player: PlayerStorageDTO) {
+    try {
+      await deletePlayerByGroup(player.name, group);
+      fetchPlayersByTeam();
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Erro", "Não foi possível remover o participante.");
+    }
+  }
+
   return (
     <Container>
       <Header showBackButton />
@@ -105,7 +116,10 @@ export const Players: React.FC = () => {
         keyExtractor={player => `${player.name}-${player.team}`}
         showsVerticalScrollIndicator={false}
         renderItem={({ item: player }) => (
-          <PlayerCard name={player.name} onDelete={() => {}} />
+          <PlayerCard
+            name={player.name}
+            onDelete={() => handleDeletePlayer(player)}
+          />
         )}
         contentContainerStyle={!players.length ? { flex: 1 } : undefined}
         ListEmptyComponent={() => (
