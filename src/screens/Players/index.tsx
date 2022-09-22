@@ -12,6 +12,7 @@ import { Highlight } from "~/components/Highlight";
 import { IconButton } from "~/components/IconButton";
 import { Input } from "~/components/Input";
 import { ListEmpty } from "~/components/ListEmpty";
+import { Loading } from "~/components/Loading";
 import { PlayerCard } from "~/components/PlayerCard";
 import { deleteGroup } from "~/storage/groups/deleteGroup";
 import { createPlayerByGroup } from "~/storage/players/createPlayerByGroup";
@@ -28,6 +29,7 @@ export interface PlayersRouteParams {
 const teams = ["Time A", "Time B"];
 
 export const Players: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [team, setTeam] = useState(teams[0]);
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [newPlayerName, setNewPlayerName] = useState("");
@@ -37,12 +39,15 @@ export const Players: React.FC = () => {
   const { group } = params as PlayersRouteParams;
 
   const fetchPlayersByTeam = useCallback(() => {
+    setIsLoading(true);
+
     getAllPlayersByGroupAndTeam(group, team)
       .then(setPlayers)
       .catch(error => {
         console.log(error);
         Alert.alert("Erro", "Não foi possível buscar os participantes.");
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, [group, team]);
 
   useFocusEffect(fetchPlayersByTeam);
@@ -70,18 +75,34 @@ export const Players: React.FC = () => {
     }
   }
 
-  async function handleDeletePlayer(player: PlayerStorageDTO) {
-    try {
-      await deletePlayerByGroup(player.name, group);
-      fetchPlayersByTeam();
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Erro", "Não foi possível remover o participante.");
-    }
+  function handleDeletePlayer(player: PlayerStorageDTO) {
+    Alert.alert(
+      "Atenção",
+      `Tem certeza que deseja remover o participante ${player.name}?`,
+      [
+        {
+          text: "Não",
+          style: "cancel",
+        },
+        {
+          text: "Sim",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await deletePlayerByGroup(player.name, group);
+              fetchPlayersByTeam();
+            } catch (error) {
+              console.log(error);
+              Alert.alert("Erro", "Não foi possível remover o participante.");
+            }
+          },
+        },
+      ],
+    );
   }
 
   function handleDeleteGroup() {
-    Alert.alert("Atenção", "Deseja mesmo remover o grupo?", [
+    Alert.alert("Atenção", `Tem certeza que deseja remover a turma ${group}?`, [
       {
         text: "Não",
         style: "cancel",
@@ -139,21 +160,25 @@ export const Players: React.FC = () => {
         <NumberOfPlayers>{players.length}</NumberOfPlayers>
       </HeaderList>
 
-      <FlatList
-        data={players}
-        keyExtractor={player => `${player.name}-${player.team}`}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item: player }) => (
-          <PlayerCard
-            name={player.name}
-            onDelete={() => handleDeletePlayer(player)}
-          />
-        )}
-        contentContainerStyle={!players.length ? { flex: 1 } : undefined}
-        ListEmptyComponent={() => (
-          <ListEmpty message="Não há pessoas nesse time" />
-        )}
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <FlatList
+          data={players}
+          keyExtractor={player => `${player.name}-${player.team}`}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item: player }) => (
+            <PlayerCard
+              name={player.name}
+              onDelete={() => handleDeletePlayer(player)}
+            />
+          )}
+          contentContainerStyle={!players.length ? { flex: 1 } : undefined}
+          ListEmptyComponent={() => (
+            <ListEmpty message="Não há pessoas nesse time" />
+          )}
+        />
+      )}
 
       <Button
         title="Remover turma"
