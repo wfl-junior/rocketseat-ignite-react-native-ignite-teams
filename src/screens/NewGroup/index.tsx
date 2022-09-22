@@ -5,6 +5,7 @@ import { Button } from "~/components/Button";
 import { Header } from "~/components/Header";
 import { Highlight } from "~/components/Highlight";
 import { Input } from "~/components/Input";
+import { createGroup } from "~/storage/groups/createGroup";
 import { Container, Content, Icon } from "./styles";
 
 export const NewGroup: React.FC = () => {
@@ -12,7 +13,8 @@ export const NewGroup: React.FC = () => {
   const { navigate } = useNavigation();
   const [group, setGroup] = useState("");
 
-  function handleAddNewGroup() {
+  async function handleAddNewGroup() {
+    await createGroup(group);
     navigate("players", { group });
   }
 
@@ -34,6 +36,7 @@ export const NewGroup: React.FC = () => {
           onChangeText={setGroup}
           autoCapitalize="words"
           autoCorrect={false}
+          onSubmitEditing={handleAddNewGroup}
         />
 
         <Button

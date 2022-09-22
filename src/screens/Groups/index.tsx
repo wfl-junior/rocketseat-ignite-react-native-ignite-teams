@@ -1,16 +1,23 @@
-import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useCallback, useState } from "react";
 import { FlatList } from "react-native";
 import { Button } from "~/components/Button";
 import { GroupCard } from "~/components/GroupCard";
 import { Header } from "~/components/Header";
 import { Highlight } from "~/components/Highlight";
 import { ListEmpty } from "~/components/ListEmpty";
+import { getAllGroups } from "~/storage/groups/getAllGroups";
 import { Container } from "./styles";
 
 export const Groups: React.FC = () => {
   const [groups, setGroups] = useState<string[]>([]);
   const { navigate } = useNavigation();
+
+  useFocusEffect(
+    useCallback(() => {
+      getAllGroups().then(setGroups).catch(console.log);
+    }, []),
+  );
 
   function handleNewGroup() {
     navigate("new-group");
