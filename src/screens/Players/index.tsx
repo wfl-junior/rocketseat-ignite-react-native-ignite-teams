@@ -1,6 +1,6 @@
 import { useFocusEffect, useRoute } from "@react-navigation/native";
-import { useCallback, useState } from "react";
-import { Alert, FlatList } from "react-native";
+import { useCallback, useRef, useState } from "react";
+import { Alert, FlatList, TextInput } from "react-native";
 import { Button } from "~/components/Button";
 import { Filter } from "~/components/Filter";
 import { Header } from "~/components/Header";
@@ -25,6 +25,7 @@ export const Players: React.FC = () => {
   const [team, setTeam] = useState(teams[0]);
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [newPlayerName, setNewPlayerName] = useState("");
+  const newPlayerNameInputRef = useRef<TextInput>(null);
   const { params } = useRoute();
   const { group } = params as PlayersRouteParams;
 
@@ -48,8 +49,10 @@ export const Players: React.FC = () => {
       }
 
       await createPlayerByGroup({ name: newPlayerNameTrimmed, team }, group);
-
       fetchPlayersByTeam();
+
+      setNewPlayerName("");
+      newPlayerNameInputRef.current?.blur();
     } catch (error) {
       if (error instanceof AppError) {
         return Alert.alert("Erro", error.message);
@@ -63,17 +66,18 @@ export const Players: React.FC = () => {
   return (
     <Container>
       <Header showBackButton />
-
       <Highlight title={group} subtitle="Adicione a galera e separe os times" />
 
       <Form>
         <Input
+          ref={newPlayerNameInputRef}
           placeholder="Nome do participante"
           autoCapitalize="words"
           autoCorrect={false}
           value={newPlayerName}
           onChangeText={setNewPlayerName}
           onSubmitEditing={handleAddPlayer}
+          returnKeyType="done"
         />
 
         <IconButton icon="add" onPress={handleAddPlayer} />
@@ -109,7 +113,11 @@ export const Players: React.FC = () => {
         )}
       />
 
-      <Button title="Remover turma" type="secondary" />
+      <Button
+        title="Remover turma"
+        type="secondary"
+        style={{ marginTop: 16 }}
+      />
     </Container>
   );
 };

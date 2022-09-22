@@ -54,6 +54,7 @@ export const NewGroup: React.FC = () => {
           autoCapitalize="words"
           autoCorrect={false}
           onSubmitEditing={handleAddNewGroup}
+          returnKeyType="done"
         />
 
         <Button
