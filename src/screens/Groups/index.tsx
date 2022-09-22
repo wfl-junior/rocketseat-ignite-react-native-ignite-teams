@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { FlatList } from "react-native";
+import { Alert, FlatList } from "react-native";
 import { Button } from "~/components/Button";
 import { GroupCard } from "~/components/GroupCard";
 import { Header } from "~/components/Header";
@@ -15,7 +15,12 @@ export const Groups: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getAllGroups().then(setGroups).catch(console.log);
+      getAllGroups()
+        .then(setGroups)
+        .catch(error => {
+          console.log(error);
+          Alert.alert("Erro", "Não foi possível buscar os grupos.");
+        });
     }, []),
   );
 

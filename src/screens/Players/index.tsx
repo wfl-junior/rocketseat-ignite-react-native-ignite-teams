@@ -1,5 +1,5 @@
-import { useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
+import { useCallback, useState } from "react";
 import { Alert, FlatList } from "react-native";
 import { Button } from "~/components/Button";
 import { Filter } from "~/components/Filter";
@@ -10,7 +10,8 @@ import { Input } from "~/components/Input";
 import { ListEmpty } from "~/components/ListEmpty";
 import { PlayerCard } from "~/components/PlayerCard";
 import { createPlayerByGroup } from "~/storage/players/createPlayerByGroup";
-import { getAllPlayersByGroup } from "~/storage/players/getAllPlayersByGroup";
+import { getAllPlayersByGroupAndTeam } from "~/storage/players/getAllPlayersByGroupAndTeam";
+import { PlayerStorageDTO } from "~/storage/players/PlayerStorageDTO";
 import { AppError } from "~/utils/AppError";
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 
@@ -22,7 +23,7 @@ const teams = ["Time A", "Time B"];
 
 export const Players: React.FC = () => {
   const [team, setTeam] = useState("Time A");
-  const [players, setPlayers] = useState<string[]>([]);
+  const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [newPlayerName, setNewPlayerName] = useState("");
   const { params } = useRoute();
   const { group } = params as PlayersRouteParams;
@@ -36,8 +37,9 @@ export const Players: React.FC = () => {
       }
 
       await createPlayerByGroup({ name: newPlayerNameTrimmed, team }, group);
-      const players = await getAllPlayersByGroup(group);
-      console.log(players);
+
+      const players = await getAllPlayersByGroupAndTeam(group, team);
+      setPlayers(players);
     } catch (error) {
       if (error instanceof AppError) {
         return Alert.alert("Erro", error.message);
@@ -47,6 +49,17 @@ export const Players: React.FC = () => {
       Alert.alert("Erro", "Não foi possível adicionar o participante.");
     }
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      getAllPlayersByGroupAndTeam(group, team)
+        .then(setPlayers)
+        .catch(error => {
+          console.log(error);
+          Alert.alert("Erro", "Não foi possível buscar os participantes.");
+        });
+    }, [group, team]),
+  );
 
   return (
     <Container>
@@ -86,10 +99,10 @@ export const Players: React.FC = () => {
 
       <FlatList
         data={players}
-        keyExtractor={player => player}
+        keyExtractor={player => player.name}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <PlayerCard name={item} onDelete={() => {}} />
+        renderItem={({ item: player }) => (
+          <PlayerCard name={player.name} onDelete={() => {}} />
         )}
         contentContainerStyle={!players.length ? { flex: 1 } : undefined}
         ListEmptyComponent={() => (
