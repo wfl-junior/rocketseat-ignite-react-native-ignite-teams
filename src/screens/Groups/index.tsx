@@ -19,6 +19,10 @@ export const Groups: React.FC = () => {
     }, []),
   );
 
+  function handleOpenGroup(group: string) {
+    navigate("players", { group });
+  }
+
   function handleNewGroup() {
     navigate("new-group");
   }
@@ -32,7 +36,9 @@ export const Groups: React.FC = () => {
         data={groups}
         keyExtractor={group => group}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item: group }) => <GroupCard title={group} />}
+        renderItem={({ item: group }) => (
+          <GroupCard title={group} onPress={() => handleOpenGroup(group)} />
+        )}
         contentContainerStyle={!groups.length ? { flex: 1 } : undefined}
         ListEmptyComponent={() => (
           <ListEmpty message="Que tal cadastrar a primeira turma?" />
